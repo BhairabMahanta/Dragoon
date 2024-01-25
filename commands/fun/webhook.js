@@ -8,7 +8,7 @@ module.exports = {
   description: 'Displays a list of available commands and their descriptions.',
   async execute(client, message, args) {
     // Replace 'YOUR_WEBHOOK_URL' with your actual webhook URL crowd
-    const webhookURL = 'https://discord.com/api/webhooks/1163480323129081906/GUjogZPEfhE5KnZeLdkom4u6k6A5VdLaX_1rdqqR5voEoBHITII-GiR5OYJ71U_PkAyk';
+    const webhookURL = 'placeurl';
 
     // Create a new WebhookClient
     const webhook = new WebhookClient({ url: webhookURL });
@@ -28,7 +28,7 @@ module.exports = {
       // Send or edit the embed based on the 'edit' parameter
             if (editEmbed) {
               // FIND THE MESSAGE ID CROWD FOR THE WEBHOOK replace 1200171233
-              await webhook.editMessage('1163507651695611935', { embeds: [embed] });
+              await webhook.editMessage('id', { embeds: [embed] });
               message.reply('Embed message edited successfully!');
             } else {
               // Send a new embed message to the webhook
