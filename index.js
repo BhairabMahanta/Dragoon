@@ -2,29 +2,7 @@
 const { Client, IntentsBitField, EmbedBuilder, ButtonBuilder, ActionRowBuilder, SlashCommandBuilder, Events, ModalBuilder, Collection } = require('discord.js');
 const path = require('path');
 const fs = require('fs');
-/*
-const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = "mongodb+srv://USERNAME:PASSWORD@cluster0.ukxb93z.mongodb.net/?retryWrites=true&w=majority";
-// MongoDB connection setup
-const mongoClient = new MongoClient(uri, {
 
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  }
-});
-
-async function connectToDB() {
-  try {
-    await mongoClient.connect();
-    console.log('Connected to MongoDB');
-  } catch (error) {
-    console.error('Error connecting to MongoDB:', error);
-  }
-}
-
-*/
 
 const client = new Client({
   intents: [
@@ -80,6 +58,34 @@ client.on('ready', () => {
  
   client.user.setPresence({ activities: [{ name: 'Crowdslay is probably breaking something again!' }], status: 'online' });
 }); //tells that bot is hot and on
+
+client.on('messageCreate', async (message) => {
+  // Check if the message is from a bot or not in a guild
+  if (message.author.bot || !message.guild) return;
+
+  // Load current settings
+  const settings = require('./commands/fun/watching.json');
+
+  // Check if the channel is being watched
+  if (!settings.channels.hasOwnProperty(message.channel.id)) return;
+  const channelId = message.channel.id;
+  console.log(channelId)
+  const channelData = settings.channels[channelId];
+  console.log(channelData)
+   if (channelData.stats.status === false) return;
+// console.log('true'  )
+  // Check if there are keywords for autoresponse
+  if (channelData.keywords && channelData.keywords.length > 0) {
+    // Check if the message starts with any keyword
+    const keywordData = channelData.keywords.find(kw => message.content.toLowerCase().startsWith(kw.keyword));
+    console.log('true')
+    // If a keyword is found, send the autoresponse
+    if (keywordData) {
+      console.log('true')
+      message.reply(keywordData.response);
+    }
+  }
+});
 
 const BOT_PREFIX = "a!";
 

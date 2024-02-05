@@ -1,0 +1,54 @@
+{
+  "channels": {
+    "954646444445429830": {
+      "stats": {
+        "status": true
+      },
+      "keywords": [
+        {
+          "keyword": "crowd",
+          "response": "bubu"
+        },
+        {
+          "keyword": "akai",
+          "response": "gae"
+        }
+      ]
+    },
+    "1139983793550282893": {
+      "stats": {
+        "status": true
+      },
+      "keywords": [
+        {
+          "keyword": "crowd",
+          "response": "bubu"
+        },
+        {
+          "keyword": [
+            "<<akaiimonkeh>>",
+            "akaiimonkeh"
+          ],
+          "response": [
+            "<&imnotgae&>",
+            "imnotgae"
+          ]
+        },
+        {
+          "keyword": [
+            "<<akaiimonkeh>>",
+            "akaiimonkeh"
+          ],
+          "response": [
+            "<&imnotgae&>",
+            "imnotgae"
+          ]
+        },
+        {
+          "keyword": "akaii monkeh",
+          "response": "im not gae"
+        }
+      ]
+    }
+  }
+}
