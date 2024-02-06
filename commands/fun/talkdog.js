@@ -14,14 +14,25 @@ module.exports = {
     }
 let keyword;
 let response;
+let multiKey;
     const channelId = args[0].replace(/[<#>]/g, ''); // Extract channel ID from mention
     try{
-      const regexKeyword = /<<(.*?)>>/; // Regex to extract content between << and >>
-      const regexResponse = /<&(.*?)&>/; // Regex to extract content between <& and &>
-  const bargs = args.join('').trim()
-  console.log('bargs', bargs)
+ 
+   const regex = /<<([^>]+?)(?:\s*==\s*([^>]+?))*>>(?:\s*==\s*([^>]+?))*/g;
+    if (args.join(' ').match(regex) ){
+    multiKey = args.join(' ').match(regex);
+    console.log('multiKey', multiKey);
+    multiKey = multiKey[0].replace(/<<|>>/g, '');
+    console.log('multiKey2', multiKey);
+   
+multiKey = multiKey.split('==');
+keyword = multiKey;
+console.log('multiKey3', multiKey)
+  
+}
+if (!multiKey){
   keyword = args.join(' ').match(/<<([^>]+)>>/)?.[1];
-
+}
        console.log('keyword',keyword)
        response = args.join(' ').match(/<&([^&]+)&>/)?.[1];
 

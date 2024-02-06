@@ -68,21 +68,38 @@ client.on('messageCreate', async (message) => {
 
   // Check if the channel is being watched
   if (!settings.channels.hasOwnProperty(message.channel.id)) return;
+
   const channelId = message.channel.id;
-  console.log(channelId)
   const channelData = settings.channels[channelId];
-  console.log(channelData)
-   if (channelData.stats.status === false) return;
-// console.log('true'  )
+
+  // Check if the channel is enabled
+  if (!channelData.stats.status) return;
+
   // Check if there are keywords for autoresponse
   if (channelData.keywords && channelData.keywords.length > 0) {
-    // Check if the message starts with any keyword
-    const keywordData = channelData.keywords.find(kw => message.content.toLowerCase().startsWith(kw.keyword));
-    console.log('true')
-    // If a keyword is found, send the autoresponse
-    if (keywordData) {
-      console.log('true')
-      message.reply(keywordData.response);
+    let matchedKeyword = null;
+    let messageContent = message.content.toLowerCase();
+
+    // Iterate through each keyword
+    channelData.keywords.forEach(keywordObj => {
+      if (Array.isArray(keywordObj.keyword)) {
+        // If keyword is an array, check if message content starts with any of the keywords
+        keywordObj.keyword.forEach(keyword => {
+          if (messageContent.startsWith(keyword.toLowerCase())) {
+            matchedKeyword = keywordObj;
+          }
+        });
+      } else {
+        // If keyword is a single string, check if message content starts with it
+        if (messageContent.startsWith(keywordObj.keyword.toLowerCase())) {
+          matchedKeyword = keywordObj;
+        }
+      }
+    });
+
+    // If a matched keyword is found, send the autoresponse
+    if (matchedKeyword) {
+      message.reply(matchedKeyword.response);
     }
   }
 });

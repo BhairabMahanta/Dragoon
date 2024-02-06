@@ -12,6 +12,38 @@
         {
           "keyword": "akai",
           "response": "gae"
+        },
+        {
+          "keyword": "Black Company",
+          "response": "Spaces proBably dont work\" oir maybe capital letter?"
+        },
+        {
+          "keyword": "Multi == Titites == hahaha==gaga",
+          "response": "Spaces proBably dont work\" oir maybe capital letter?"
+        },
+        {
+          "keyword": [
+            "woof",
+            "bark",
+            "bork"
+          ],
+          "response": "gaeahh"
+        },
+        {
+          "keyword": [
+            "crowd",
+            "im",
+            "you"
+          ],
+          "response": "dead"
+        },
+        {
+          "keyword": [
+            "SinkTheYacht",
+            "SINK THE YACHT",
+            "kurosanji"
+          ],
+          "response": " <#669484452661166100> Comply with the rules :mapleBang:"
         }
       ]
     },
