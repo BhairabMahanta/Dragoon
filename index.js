@@ -99,6 +99,11 @@ client.on('messageCreate', async (message) => {
 
     // If a matched keyword is found, send the autoresponse
     if (matchedKeyword) {
+      const chanceNumber = matchedKeyword.chance || 100;
+      console.log('chanceNumber', chanceNumber);
+      const chance = Math.floor(Math.random() < chanceNumber / 100);
+      console.log('chance', chance);
+      if (!chance) return;
       message.reply(matchedKeyword.response);
     }
   }
