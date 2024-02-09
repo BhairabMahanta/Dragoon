@@ -6,44 +6,11 @@
       },
       "keywords": [
         {
-          "keyword": "crowd",
-          "response": "bubu"
-        },
-        {
-          "keyword": "akai",
-          "response": "gae"
-        },
-        {
-          "keyword": "Black Company",
-          "response": "Spaces proBably dont work\" oir maybe capital letter?"
-        },
-        {
-          "keyword": "Multi == Titites == hahaha==gaga",
-          "response": "Spaces proBably dont work\" oir maybe capital letter?"
-        },
-        {
           "keyword": [
-            "woof",
-            "bark",
-            "bork"
+            "bark"
           ],
-          "response": "gaeahh"
-        },
-        {
-          "keyword": [
-            "crowd",
-            "im",
-            "you"
-          ],
-          "response": "dead"
-        },
-        {
-          "keyword": [
-            "SinkTheYacht",
-            "SINK THE YACHT",
-            "kurosanji"
-          ],
-          "response": " <#669484452661166100> Comply with the rules :mapleBang:"
+          "response": "it should be broken because you havent put let multikey",
+          "chance": "50"
         },
         {
           "keyword": [
@@ -51,42 +18,8 @@
             "so",
             "what"
           ],
-          "response": "it should be broken because you havent put let multikey"
-        }
-      ]
-    },
-    "1139983793550282893": {
-      "stats": {
-        "status": true
-      },
-      "keywords": [
-        {
-          "keyword": "crowd",
-          "response": "bubu"
-        },
-        {
-          "keyword": [
-            "<<akaiimonkeh>>",
-            "akaiimonkeh"
-          ],
-          "response": [
-            "<&imnotgae&>",
-            "imnotgae"
-          ]
-        },
-        {
-          "keyword": [
-            "<<akaiimonkeh>>",
-            "akaiimonkeh"
-          ],
-          "response": [
-            "<&imnotgae&>",
-            "imnotgae"
-          ]
-        },
-        {
-          "keyword": "akaii monkeh",
-          "response": "im not gae"
+          "response": "it should be broken because you havent put let multikey",
+          "chance": "10"
         }
       ]
     }

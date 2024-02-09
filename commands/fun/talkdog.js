@@ -19,6 +19,10 @@ let response;
       const regex = /<<([^>]+?)(?:\s*==\s*([^>]+?))*>>(?:\s*==\s*([^>]+?))*/g;
       if (args.join(' ').match(regex) ){
       multiKey = args.join(' ').match(regex);
+      const regex3 = /\(\((.*?)\)\)/;
+      console.log('multiKey', multiKey);
+      chance = args.join(' ').match(/\(\((.*?)\)\)/)?.[1]; 
+      console.log('cooldown', chance);
       console.log('multiKey', multiKey);
       multiKey = multiKey[0].replace(/<<|>>/g, '');
       console.log('multiKey2', multiKey);
@@ -41,7 +45,9 @@ let response;
           return message.reply('Invalid format for keyword or response. Please use "<<keyword>>" and "<&response&>".');
         }
     }catch(e){
+      console.error(e);
       return message.reply(`Usage: a!talkdog <<keyword>> <&response&>`);
+      
     }
 
     // Read current settings
@@ -65,14 +71,27 @@ let response;
       settings.channels[channelId].keywords = [];
     } else {
       // Check if the keyword already exists
-      const keywordData = channelData.keywords.find(kw => kw.keyword === keyword);
+      const keywordData = channelData.keywords.find(kw => {
+        return kw.keyword.some(k => keyword.includes(k));
+      });
+      
       if (keywordData) {
         return message.reply(`Keyword "${keyword}" already exists in <#${channelId}>.`);
       }
-    }
+
+    }  // Check if the channel keywords array has a chance property
+    if (chance && !isNaN(chance)) {
+    const chanceData = channelData.keywords.find(kw => kw.chance === chance);
+    if (chanceData) {
+      return message.reply(`Chance "${chance}" already exists in <#${channelId}>.`);
+    }}
+     if (!channelData.keywords) {
+      settings.channels[channelId].keywords = [];
+      };
+
 
     // Add keyword-response pair to the array
-    settings.channels[channelId].keywords.push({ keyword, response });
+    settings.channels[channelId].keywords.push({ keyword, response, chance });
 
     // Save updated settings
     fs.writeFileSync('./commands/fun/watching.json', JSON.stringify(settings, null, 2));
