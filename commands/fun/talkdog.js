@@ -71,6 +71,7 @@ let response;
       settings.channels[channelId].keywords = [];
     } else {
       // Check if the keyword already exists
+      console.log('channelData.keywords', channelData.keywords);
       const keywordData = channelData.keywords.find(kw => {
         return kw.keyword.some(k => keyword.includes(k));
       });
@@ -82,9 +83,7 @@ let response;
     }  // Check if the channel keywords array has a chance property
     if (chance && !isNaN(chance)) {
     const chanceData = channelData.keywords.find(kw => kw.chance === chance);
-    if (chanceData) {
-      return message.reply(`Chance "${chance}" already exists in <#${channelId}>.`);
-    }}
+   }
      if (!channelData.keywords) {
       settings.channels[channelId].keywords = [];
       };

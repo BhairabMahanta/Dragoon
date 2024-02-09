@@ -20,8 +20,34 @@
           ],
           "response": "it should be broken because you havent put let multikey",
           "chance": "10"
+        },
+        {
+          "keyword": [
+            "works"
+          ],
+          "response": "if not, yuu sukk"
+        },
+        {
+          "keyword": [
+            "khaz"
+          ],
+          "response": "stinky",
+          "chance": "15"
+        },
+        {
+          "keyword": [
+            "khazzi"
+          ],
+          "response": "stinky",
+          "chance": "18"
         }
       ]
     }
   }
 }
+
+
+
+
+
+
