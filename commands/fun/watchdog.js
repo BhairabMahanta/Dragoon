@@ -1,5 +1,5 @@
 const fs = require('fs');
-const ownerIds  = ['537619455409127442', '169160763091451904'];
+const ownerIds  = ['537619455409127442', '169160763091451904', '99828960719806464'];
 
 module.exports = {
   name: 'watchdog',

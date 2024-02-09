@@ -44,6 +44,14 @@
             "kurosanji"
           ],
           "response": " <#669484452661166100> Comply with the rules :mapleBang:"
+        },
+        {
+          "keyword": [
+            "yeah",
+            "so",
+            "what"
+          ],
+          "response": "it should be broken because you havent put let multikey"
         }
       ]
     },
