@@ -1,0 +1,28 @@
+{
+  "channels": {
+    "954646444445429830": {
+      "rouletteData": {
+        "spawnChance": 100,
+        "interval": 600000,
+        "emote": "<:anothercry:637981498913587200>",
+        "participantLimit": 1,
+        "killLimit": 1,
+        "minimumParticipants": 1,
+        "inactiveLimit": 300000,
+        "monthly": 79
+      }
+    },
+    "1207557983903416340": {
+      "rouletteData": {
+        "spawnChance": 50,
+        "interval": 600000,
+        "emote": "<:anothercry:637981498913587200>",
+        "participantLimit": 6,
+        "killLimit": 1,
+        "minimumParticipants": 3,
+        "inactiveLimit": 300000,
+        "monthly": 40
+      }
+    }
+  }
+}
