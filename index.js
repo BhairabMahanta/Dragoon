@@ -2,6 +2,7 @@
 const { Client, IntentsBitField, EmbedBuilder, ButtonBuilder, ActionRowBuilder, SlashCommandBuilder, Events, ModalBuilder, Collection } = require('discord.js');
 const path = require('path');
 const fs = require('fs');
+const {RouletteGame} = require('./commands/fun/rouletteClass');
 const settings = require('./commands/fun/roulette.json');
 const { monthlyIncrement, startRouletteOrOtherAction } = require('./commands/fun/someFunctions');
 const client = new Client({
@@ -118,11 +119,12 @@ client.on('messageCreate', async (message) => {
 const interval = 10 * 1000;
 setInterval(whoInterval, interval);
 const BOT_PREFIX = "a!";
-
+/*
 async function rouletteInit(channelId) {
     // Load current settings
      // Check if the channel is being watched
      let participants = [];
+     let users = [];
     if (!settings.channels.hasOwnProperty(channelId)) return;
   
     const channelData = settings.channels[channelId];
@@ -139,7 +141,7 @@ async function rouletteInit(channelId) {
     const embed = new EmbedBuilder()
       .setTitle(`Roulette Game # ${daHta.monthly}!`)
       .setDescription(`React with the button ${daHta.emote}`)
-      .addFields({ name: 'Participants', value: participants.length === 0 ? `None, aborting it if ${daHta.inactiveLimit} minutes cross without any participants!` : participants.join('\n'), inline: false})
+      .addFields({ name: 'Participants', value: participants.length === 0 ? `None, aborting it if ${daHta.inactiveLimit/ 60000} minutes cross without any participants!` : participants.join('\n'), inline: false})
       .addFields({ name:'Participant Limit', value: `${participants.length}/${daHta.participantLimit}`, inline: false });
   
     // Create the action row with the button
@@ -155,8 +157,10 @@ async function rouletteInit(channelId) {
     const sentMessage = await client.channels.cache.get(channelId).send({ embeds: [embed], components: [row] });
     // Create a message collector for the button
     const filter = i => (['join_roulette'].includes(i.customId)) || (i.customId === 'option_select');
-    const collector = sentMessage.createMessageComponentCollector({ filter, time:daHta.inactiveLimit });
-  
+    const collector = sentMessage.createMessageComponentCollector({ filter, time: daHta.inactiveLimit });
+    let startTime
+    
+      startTime = Date.now();
     // Event listener for the button click
     collector.on('collect', async interaction => {
       try {
@@ -167,7 +171,6 @@ async function rouletteInit(channelId) {
         // Add the user to the participants list
         participants.push(interaction.user.id);
         // Update the embed with the new participant
-        var users = [] 
         users.push(interaction.user.username);
 
         embed.data.fields[0].value = users.join('\n');
@@ -179,9 +182,12 @@ async function rouletteInit(channelId) {
           sentMessage.channel.send({ content: 'You have a deathwish trying to participate multiple times!?', ephemeral: true });
         // }
         }
+        const elapsedTime = Date.now() - startTime;
+        console.log('Elapsed time:', elapsedTime);
+
       // Check if the participant limit or the inactive limit is reached
-      if (participants.length >= daHta.participantLimit || collector.time >= daHta.inactiveLimit || participants.length >= daHta.minimumParticipants) {
-await startRouletteOrOtherAction(participants, daHta, embed, sentMessage, users);
+      if (participants.length >= daHta.participantLimit || (elapsedTime >= daHta.inactiveLimit && participants.length >= daHta.minimumParticipants)) {
+await startRouletteOrOtherAction(participants, daHta, embed, sentMessage, users, client);
       }
     } catch (error) {
       console.log('error (i think someone spamming the button', error);
@@ -190,10 +196,15 @@ await startRouletteOrOtherAction(participants, daHta, embed, sentMessage, users)
   
     // Event listener for the collector end
     collector.on('end', async () => {
+      const elapsedTime = Date.now() - startTime;
+      console.log('Elapsed time:', elapsedTime);
+      if (participants.length >= daHta.participantLimit || (elapsedTime >= daHta.inactiveLimit && participants.length >= daHta.minimumParticipants)) {
+        await startRouletteOrOtherAction(participants, daHta, embed, sentMessage, users, client);
+      }
       // Your logic when the collector ends
     });
   
-  };
+  };*/
 
 
 
@@ -202,6 +213,8 @@ async function whoInterval() {
   // Iterate through each channel in settings
   for (const channelId in settings.channels) {
     console.log('channelId', channelId);
+    const roulettegame = new RouletteGame(channelId, settings, client);
+          roulettegame.start();
     const channelData = settings.channels[channelId];
     const rouletteData = channelData.rouletteData;
 
@@ -213,7 +226,7 @@ async function whoInterval() {
     if (shouldTrigger) {
       // Call the rouletteInit function with channel ID
         await monthlyIncrement(channelId);
-      await rouletteInit(channelId, rouletteData);
+      // await rouletteInit(channelId, rouletteData);
       
     }
   }

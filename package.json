@@ -10,6 +10,11 @@
   "license": "ISC",
   "dependencies": {
     "@napi-rs/canvas": "^0.1.45",
-    "discord.js": "^14.14.1"
+    "axios": "^1.6.7",
+    "discord.js": "^14.14.1",
+    "jimp": "^0.22.10",
+    "node-fetch": "^3.3.2",
+    "sharp": "^0.33.2",
+    "uuid": "^9.0.1"
   }
 }
