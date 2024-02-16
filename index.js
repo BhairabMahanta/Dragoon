@@ -116,8 +116,6 @@ client.on('messageCreate', async (message) => {
 
 
 
-const interval = 10 * 1000;
-setInterval(whoInterval, interval);
 const BOT_PREFIX = "a!";
 /*
 async function rouletteInit(channelId) {
@@ -207,11 +205,19 @@ await startRouletteOrOtherAction(participants, daHta, embed, sentMessage, users,
   };*/
 
 
-
-async function whoInterval() {
-
-  // Iterate through each channel in settings
   for (const channelId in settings.channels) {
+    console.log('channelId', channelId);
+    const channelData = settings.channels[channelId];
+    const rouletteData = channelData.rouletteData;
+    const interval = rouletteData.interval;
+    console.log('interval', interval);
+    setInterval(() => {
+      whoInterval(channelId); // Call the function inside the setInterval callback
+  }, interval);
+
+  }
+async function whoInterval(channelId) {
+
     console.log('channelId', channelId);
     const roulettegame = new RouletteGame(channelId, settings, client);
           roulettegame.start();
@@ -219,8 +225,6 @@ async function whoInterval() {
     const rouletteData = channelData.rouletteData;
 
     // Check if rouletteData is defined for the channel
-    if (!rouletteData) continue;
-
     // Check if it's time to trigger a roulette game based on spawnChance
     const shouldTrigger = Math.random() * 100 <= rouletteData.spawnChance;
     if (shouldTrigger) {
@@ -229,7 +233,7 @@ async function whoInterval() {
       // await rouletteInit(channelId, rouletteData);
       
     }
-  }
+  
 }
 
 client.login(config.token);

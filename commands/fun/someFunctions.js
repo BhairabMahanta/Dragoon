@@ -114,6 +114,7 @@ const compositeImageBuffer = await sharp(background)
        
         
         await sentMessage.edit({ embeds: [embedd], files: [attachment], components: [] });
+    
   
 }
 

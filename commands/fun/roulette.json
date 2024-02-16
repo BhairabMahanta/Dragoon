@@ -3,25 +3,25 @@
     "954646444445429830": {
       "rouletteData": {
         "spawnChance": 100,
-        "interval": 600000,
+        "interval": 10000,
         "emote": "<:anothercry:637981498913587200>",
         "participantLimit": 3,
         "killLimit": 1,
         "minimumParticipants": 1,
         "inactiveLimit": 10000,
-        "monthly": 521
+        "monthly": 542
       }
     },
-    "1207557983903416340": {
+    "1155951981970591864": {
       "rouletteData": {
         "spawnChance": 50,
-        "interval": 600000,
+        "interval": 15000,
         "emote": "<:anothercry:637981498913587200>",
         "participantLimit": 6,
         "killLimit": 1,
         "minimumParticipants": 3,
         "inactiveLimit": 300000,
-        "monthly": 244
+        "monthly": 251
       }
     }
   }
