@@ -1,27 +1,29 @@
 {
   "channels": {
-    "954646444445429830": {
+    "": {
       "rouletteData": {
         "spawnChance": 100,
+        "channelId": "1155951981970591864",
         "interval": 6000,
         "emote": "<:anothercry:637981498913587200>",
-        "participantLimit": 2,
+        "participantLimit": 1,
         "killLimit": 1,
         "minimumParticipants": 1,
         "inactiveLimit": 10000,
-        "monthly": 852
+        "monthly": 878
       }
     },
-    "1155951981970591864": {
+    "954646444445429830": {
       "rouletteData": {
-        "spawnChance": 50,
-        "interval": 15000,
+        "spawnChance": 100,
+        "channelId": "954646444445429830",
+        "interval": 7000,
         "emote": "<:anothercry:637981498913587200>",
-        "participantLimit": 6,
+        "participantLimit": 1,
         "killLimit": 1,
-        "minimumParticipants": 3,
-        "inactiveLimit": 300000,
-        "monthly": 332
+        "minimumParticipants": 1,
+        "inactiveLimit": 20000,
+        "monthly": 457
       }
     }
   }

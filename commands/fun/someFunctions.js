@@ -29,32 +29,42 @@ const path = require('path');
 // Define the directory where you want to save the avatar image
 
 // Define a function to handle starting the roulette game or taking other actions
-async function startRouletteOrOtherAction(participants, daHta, sentMessage, users, client) {
+async function startRouletteOrOtherAction(participants, actualParticipants, daHta, sentMessage, users, client) {
 	pewChannel = client.channels.cache.get('1207557983903416340');
 	console.log('pewChannel:', pewChannel);
 	// Check if the participant limit or the inactive limit is reached
 	console.log('startRouletteOrOtherAction');
 	let winnerArray = [];
+	let actualWinnerArray = [];
 	let winnerNameArray = [];
 	// Perform the roulette game logic or other actions here
 	console.log('killLimit:', daHta.killLimit);
-	for (let i = 0; i < daHta.killLimit && participants.length >= 1; i++) {
+	const winnerIndex = Math.floor(Math.random() * participants.length);
+	winnerArray.push(participants[winnerIndex]);
+	actualWinnerArray.push(actualParticipants[winnerIndex]);
+	winnerNameArray.push(users[winnerIndex]);
+	console.log(`Participant ${winnerArray.join(',')} eliminated`);
+	/*for (let i = 0; i < daHta.killLimit && participants.length >= 1; i++) {
 		const winnerIndex = Math.floor(Math.random() * participants.length); // Randomly select a winner
 		console.log('winnerIndex:', winnerIndex);
 		console.log('participants:', participants);
 		winnerArray.push(participants[winnerIndex]);
+		actualWinnerArray.push(actualParticipants[winnerIndex]);
+		console.log('actualWinnerArray:', actualWinnerArray);
 		console.log('winnerArray:', winnerArray);
 		console.log('users:', users);
 		winnerNameArray.push(users[winnerIndex]);
 		console.log('winnerArray:', winnerNameArray);
 		// const winnerUser = await client.users.fetch(winner);
-		participants.splice(winnerIndex, 1); // Remove the winner from the participants array
+		//	participants.splice(winnerIndex, 1); // Remove the winner from the participants array
 		console.log(`Participant ${winnerArray.join(',')} eliminated`);
-	}
+	}*/
 
-	const winner1 = winnerArray[0];
+	const winner1 = actualWinnerArray[0];
+	console.log('winner1:', winner1);
 	const pfp = await fetchUserPfp(winner1, client);
-	console.log('test');
+	// console.log('pfp:', pfp);
+	// console.log('test');
 	let resizedImage;
 	try {
 		resizedImage = await sharp(pfp)
@@ -97,11 +107,28 @@ async function startRouletteOrOtherAction(participants, daHta, sentMessage, user
 	console.log('test');
 
 	const text = winnerNameArray[0];
+	const fontSize = 24; // Initial font size
+	const maxWidth = 8.5 * fontSize; // Maximum width for 17 characters
+	let adjustedFontSize = fontSize;
+
+	// Function to calculate text width
+	function getTextWidth(text, font) {
+		// Create a temporary canvas for measuring text width
+		const tempCanvas = Canvas.createCanvas(1, 1);
+		const tempCtx = tempCanvas.getContext('2d');
+		tempCtx.font = font;
+		return tempCtx.measureText(text).width;
+	}
+
+	// Reduce font size until text fits within the specified width
+	while (getTextWidth(text, `${adjustedFontSize}px Arial`) > maxWidth) {
+		adjustedFontSize--; // Decrease font size
+	}
 	const textCanvas = Canvas.createCanvas(1440, 720); // Adjust dimensions as needed
 	const textCtx = textCanvas.getContext('2d');
 
 	// Set font properties
-	textCtx.font = '24px Arial';
+	textCtx.font = `${adjustedFontSize}px Arial`;
 	textCtx.fillStyle = 'black';
 	textCtx.textAlign = 'center';
 	textCtx.textBaseline = 'middle';
@@ -138,9 +165,35 @@ async function startRouletteOrOtherAction(participants, daHta, sentMessage, user
 		.setTitle(`Doggo Roulette # ${daHta.monthly - 1}!`)
 		.setImage('attachment://profile-image.png')
 		.setDescription(`${winnerNameArray.join('\n')} ${daHta.emote}`);
+	await sentMessage.delete();
+	const datae = efs.readFileSync('./commands/fun/previousWinners.json', 'utf8');
 
-	await sentMessage.edit({ embeds: [embedd], files: [attachment], components: [] });
-	await pewChannel.send({ content: `<@${winnerArray[0]}> has been shot by Amber`, files: [attachment] });
+	const previousWinnerz = JSON.parse(datae);
+	const shotId = winnerArray[0];
+	let amount = previousWinnerz[shotId] + 1;
+	if (isNaN(amount)) {
+		// If amount is NaN, set it to 1
+		amount = 1;
+	}
+	await sentMessage.channel.send({
+		embeds: [],
+		content: `<@${winnerArray[0]}> has been shot by Amber! They have been shot ${amount} times this month`,
+		components: [],
+	});
+	if (sentMessage.guild) {
+		const guildId = sentMessage.guild.id; // Get the guild ID
+		const guild = sentMessage.guild; // Get the guild object
+
+		// Now you can use the guild ID or guild object to access guild-related information
+		console.log(`Guild ID: ${guildId}`);
+		console.log('Guild Name:', guild.name);
+		const member = guild.members.cache.get(shotId);
+		await member
+			.timeout(10 * 60 * 1000, 'They deserved it')
+			.then(console.log)
+			.catch(console.error);
+	}
+	await pewChannel.send({ files: [attachment] });
 
 	let previousWinners = {};
 	try {
@@ -205,32 +258,6 @@ async function monthlyIncrement(channelId) {
 	const rouletteData = channelData.rouletteData;
 	rouletteData.monthly += 1;
 	await fs.writeFile('./commands/fun/roulette.json', JSON.stringify(settings, null, 2));
-}
-
-async function deleteOldFiles(directoryPath) {
-	// Get a list of all files in the directory
-	try {
-		console.log('directoryPath:', directoryPath);
-		const files = await efs.promises.readdir(directoryPath);
-
-		// Iterate through each file
-		for (const file of files) {
-			// console.log('file:', file);
-			const filePath = path.join(directoryPath, file);
-
-			// Check if the file is old (you can define your own criteria for old files)
-			const stats = await efs.promises.stat(filePath);
-			const isOldFile = Date.now() - stats.mtime.getTime() > 10 * 60 * 1000; // Example: Delete files older than 30 days
-			console.log('isOldFile:', isOldFile);
-			if (isOldFile) {
-				// Delete the old file
-				await efs.promises.unlink(filePath);
-				console.log(`Deleted old file: ${filePath}`);
-			}
-		}
-	} catch (error) {
-		console.error(`Error deleting old files: ${error}`);
-	}
 }
 
 module.exports = { monthlyIncrement, startRouletteOrOtherAction };

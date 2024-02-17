@@ -85,8 +85,7 @@ await startRouletteOrOtherAction(participants, daHta, embed, sentMessage, users,
   
   };*/
 
-
-  // const pfp = await fetchUserPfp(winner1, client);
+// const pfp = await fetchUserPfp(winner1, client);
 // Fetch the avatar image and save it locally
 // const avatarURL = pfp;
 // let imagePath;
@@ -99,25 +98,25 @@ await startRouletteOrOtherAction(participants, daHta, embed, sentMessage, users,
 
 // const cdnUrl = 'https://cdn.discordapp.com';
 // async function downloadImage(response, pathy) {
-	// Check if the file exists before attempting to write to it
-	// if (await fileExists(pathy)) {
-	//     // If the file exists, log a message indicating that it's in use
-	//     console.log(`File ${pathy} is in use. Retrying deletion after a delay...`);
-	//     // Retry deletion after a delay (e.g., 1 second)
-	//     setTimeout(() => {
-	//         deleteFile(pathy);
-	//     }, 1000); // Adjust the delay time as needed
-	//     return;
-	// }
-	// await deleteOldFiles('./avatars');
-	// // Write the response data to the file
-	// try {
-	//      await fs.writeFile(pathy, response);
-	//     console.log(`File saved as: ${pathy}`);
-	// } catch (error) {
-	//     console.error(`Error saving file: ${error}`);
-	// }
-}
+// Check if the file exists before attempting to write to it
+// if (await fileExists(pathy)) {
+//     // If the file exists, log a message indicating that it's in use
+//     console.log(`File ${pathy} is in use. Retrying deletion after a delay...`);
+//     // Retry deletion after a delay (e.g., 1 second)
+//     setTimeout(() => {
+//         deleteFile(pathy);
+//     }, 1000); // Adjust the delay time as needed
+//     return;
+// }
+// await deleteOldFiles('./avatars');
+// // Write the response data to the file
+// try {
+//      await fs.writeFile(pathy, response);
+//     console.log(`File saved as: ${pathy}`);
+// } catch (error) {
+//     console.error(`Error saving file: ${error}`);
+// }
+// }
 
 // async function fileExists(path) {
 // 	try {
@@ -134,5 +133,31 @@ await startRouletteOrOtherAction(participants, daHta, embed, sentMessage, users,
 // 		console.log(`File ${path} deleted successfully`);
 // 	} catch (error) {
 // 		console.error(`Error deleting file: ${error}`);
+// 	}
+// }
+
+// async function deleteOldFiles(directoryPath) {
+// 	// Get a list of all files in the directory
+// 	try {
+// 		console.log('directoryPath:', directoryPath);
+// 		const files = await efs.promises.readdir(directoryPath);
+
+// 		// Iterate through each file
+// 		for (const file of files) {
+// 			// console.log('file:', file);
+// 			const filePath = path.join(directoryPath, file);
+
+// 			// Check if the file is old (you can define your own criteria for old files)
+// 			const stats = await efs.promises.stat(filePath);
+// 			const isOldFile = Date.now() - stats.mtime.getTime() > 10 * 60 * 1000; // Example: Delete files older than 30 days
+// 			console.log('isOldFile:', isOldFile);
+// 			if (isOldFile) {
+// 				// Delete the old file
+// 				await efs.promises.unlink(filePath);
+// 				console.log(`Deleted old file: ${filePath}`);
+// 			}
+// 		}
+// 	} catch (error) {
+// 		console.error(`Error deleting old files: ${error}`);
 // 	}
 // }
