@@ -84,3 +84,55 @@ await startRouletteOrOtherAction(participants, daHta, embed, sentMessage, users,
     });
   
   };*/
+
+
+  // const pfp = await fetchUserPfp(winner1, client);
+// Fetch the avatar image and save it locally
+// const avatarURL = pfp;
+// let imagePath;
+// const uniqueFilename = `avatar_${uuidv4()}.webp`;
+//     imagePath = `./avatars/${uniqueFilename}`; // Local path to save the image
+//      await downloadImage(avatarURL, imagePath);
+
+// var imBuffer = await fetch(`${message.attachments.first()?.url}`);
+// var im = sharp(Buffer.from(await imBuffer.arrayBuffer()));
+
+// const cdnUrl = 'https://cdn.discordapp.com';
+// async function downloadImage(response, pathy) {
+	// Check if the file exists before attempting to write to it
+	// if (await fileExists(pathy)) {
+	//     // If the file exists, log a message indicating that it's in use
+	//     console.log(`File ${pathy} is in use. Retrying deletion after a delay...`);
+	//     // Retry deletion after a delay (e.g., 1 second)
+	//     setTimeout(() => {
+	//         deleteFile(pathy);
+	//     }, 1000); // Adjust the delay time as needed
+	//     return;
+	// }
+	// await deleteOldFiles('./avatars');
+	// // Write the response data to the file
+	// try {
+	//      await fs.writeFile(pathy, response);
+	//     console.log(`File saved as: ${pathy}`);
+	// } catch (error) {
+	//     console.error(`Error saving file: ${error}`);
+	// }
+}
+
+// async function fileExists(path) {
+// 	try {
+// 		await fs.access(path); // Check if the file exists
+// 		return true; // File exists
+// 	} catch (error) {
+// 		return false; // File does not exist
+// 	}
+// }
+
+// async function deleteFile(path) {
+// 	try {
+// 		await fs.unlink(path); // Attempt to delete the file
+// 		console.log(`File ${path} deleted successfully`);
+// 	} catch (error) {
+// 		console.error(`Error deleting file: ${error}`);
+// 	}
+// }

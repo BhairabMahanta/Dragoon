@@ -1,87 +1,76 @@
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder } = require('discord.js');
 
 module.exports = {
-  name: 'help',
-  description: 'Displays a list of available commands and their descriptions.',
-  aliases: ['commands', 'cmds'], // Add aliases here
-  async execute(client, message, args) {
-    const { commands } = client;
-    
-     const perPage = 10; // Number of commands to display per page
-    const page = args[0] || 1; // Get the requested page from arguments
+	name: 'help',
+	description: 'Displays a list of available commands and their descriptions.',
+	aliases: ['commands', 'cmds'], // Add aliases here
+	async execute(client, message, args) {
+		const { commands } = client;
 
-    console.log('Total commands:', commands.size);
-    console.log('Requested page:', page);
+		const perPage = 10; // Number of commands to display per page
+		const page = args[0] || 1; // Get the requested page from arguments
 
-    const totalPages = Math.ceil(commands.size / perPage);
-    console.log('Total pages:', totalPages);
+		console.log('Total commands:', commands.size);
+		console.log('Requested page:', page);
 
-    if (page < 1 || page > totalPages) {
-      console.log('Invalid page number:', page);
-      return message.reply('Invalid page number. Please provide a valid page number.');
-    }
+		const totalPages = Math.ceil(commands.size / perPage);
+		console.log('Total pages:', totalPages);
 
-    const startIndex = (page - 1) * perPage;
-    const endIndex = startIndex + perPage;
-    const startIndexTwo = endIndex + 1;
-    const endIndexTwp = endIndex + perPage;
+		if (page < 1 || page > totalPages) {
+			console.log('Invalid page number:', page);
+			return message.reply('Invalid page number. Please provide a valid page number.');
+		}
 
-    console.log('Start index:', startIndex);
-    console.log('End index:', endIndex);
+		const startIndex = (page - 1) * perPage;
+		const endIndex = startIndex + perPage;
+		const startIndexTwo = endIndex + 1;
+		const endIndexTwp = endIndex + perPage;
 
-    const helpEmbed = new EmbedBuilder()
-      .setColor(0x0099ff)
-      .setTitle('Command List')
-      .setDescription('Here is a list of available commands and their descriptions:')
-      .setTimestamp();
+		console.log('Start index:', startIndex);
+		console.log('End index:', endIndex);
 
-    const fields = [];
+		const helpEmbed = new EmbedBuilder()
+			.setColor(0x0099ff)
+			.setTitle('Command List')
+			.setDescription('Here is a list of available commands and their descriptions:')
+			.setTimestamp();
 
-        const commandsArray = Array.from(client.commands.values());
+		const fields = [];
 
-   commandsArray.forEach((command, index) => {
-  console.log('Looping for command:', command.name);
-     console.log('index:', index)
-  if (index >= startIndex && index < endIndex) {
-    console.log('Adding field for command:', command.name);
-    const field = {
-      name: `:green_circle: **${command.name}**`,
-      value: command.description || 'No description provided',
-      inline: false,
-    };
+		const commandsArray = Array.from(client.commands.values());
 
-    fields.push(field);
-    console.log('fields:', field);  
+		commandsArray.forEach((command, index) => {
+			console.log('Looping for command:', command.name);
+			console.log('index:', index);
+			if (index >= startIndex && index < endIndex) {
+				console.log('Adding field for command:', command.name);
+				const field = {
+					name: `:green_circle: **${command.name}**`,
+					value: command.description || 'No description provided',
+					inline: false,
+				};
 
-    if (command.aliases && Array.isArray(command.aliases) && command.aliases.length > 0) {
-      console.log('Adding aliases for command:', command.name);
-      fields.push({ name: 'Aliases', value: command.aliases.join(', '), inline: false });
-    }
-  } 
-   
-   });
+				fields.push(field);
+				console.log('fields:', field);
 
+				if (command.aliases && Array.isArray(command.aliases) && command.aliases.length > 0) {
+					console.log('Adding aliases for command:', command.name);
+					fields.push({ name: 'Aliases', value: command.aliases.join(', '), inline: false });
+				}
+			}
+		});
 
-    helpEmbed.addFields(...fields);
+		helpEmbed.addFields(...fields);
 
-    
+		const row = new ActionRowBuilder().addComponents(
+			new ButtonBuilder().setCustomId('previous').setLabel('Previous').setStyle('Primary'),
+			new ButtonBuilder().setCustomId('next').setLabel('Next').setStyle('Primary'),
+		);
 
-    const row = new ActionRowBuilder().addComponents(
-      new ButtonBuilder()
-        .setCustomId('previous')
-        .setLabel('Previous')
-        .setStyle('Primary'),
-      new ButtonBuilder()
-        .setCustomId('next')
-        .setLabel('Next')
-        .setStyle('Primary')
-    );
+		const messageComponents = [row];
 
-    const messageComponents = [row];
+		console.log('Message components:', messageComponents);
 
-    
-    console.log('Message components:', messageComponents);
-
-    message.channel.send({ embeds: [helpEmbed] });
-  },
+		message.channel.send({ embeds: [helpEmbed] });
+	},
 };
