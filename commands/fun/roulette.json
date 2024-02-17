@@ -5,11 +5,11 @@
         "spawnChance": 100,
         "interval": 6000,
         "emote": "<:anothercry:637981498913587200>",
-        "participantLimit": 1,
+        "participantLimit": 2,
         "killLimit": 1,
         "minimumParticipants": 1,
         "inactiveLimit": 10000,
-        "monthly": 775
+        "monthly": 791
       }
     },
     "1155951981970591864": {
@@ -21,7 +21,7 @@
         "killLimit": 1,
         "minimumParticipants": 3,
         "inactiveLimit": 300000,
-        "monthly": 319
+        "monthly": 322
       }
     }
   }

@@ -69,9 +69,10 @@ class RouletteGame {
         // Event listener for the button click
         collector.on('collect', async interaction => {
             try {
-                interaction.deferUpdate();
+           
 
                 if (!this.participants.includes(interaction.user.id) &&!(this.participants.length >= this.daHta.participantLimit) ) {
+                    interaction.deferUpdate();
 
                 console.log('participants:', this.participants.length)
 console.log('participantslimit:', this.daHta.participantLimit)
@@ -96,11 +97,14 @@ console.log('Elapsed time:', elapsedTime);
                     
                         } else { 
                             console.log('PARTICIPANT LIMIT EXCEEDED YOU CANT JOIN ', interaction.user.username)   
+                            
                         }
                     
                 } else {
                    // this.sentMessage.channel.send({ content: 'You can only join the roulette game once', ephemeral: true }); 
                    console.log('PARTICIPANT LIMIT EXCEEDED YOU CANT JOIN ', interaction.user.username)   
+                   await interaction.deferUpdate(); // Defer the update instead of replying
+                   interaction.followUp({ content: 'You can only join the roulette game once', ephemeral: true });
                   return console.log('fix this later')
                 }
                 if (this.participants.length >= daHta.participantLimit ) {

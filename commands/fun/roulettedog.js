@@ -81,7 +81,7 @@
       // Save roulette data to JSON file
       fs.writeFileSync(rouletteJSON, JSON.stringify(settings, null, 2));
       }
-      return message.reply(`Roulette game set up in <#${channelId}> with spawn chance ${spawnChance}%, interval ${interval} minutes, with emoji ${emote}. The game will end when ${kLimit} people die, or when ${iLimit} minutes pass without ${mLimit} participants.`);
+      return message.reply(`Successfully set up a roulette game in <#${channelId}> with a spawn chance of ${spawnChance}% every ${interval} minutes! (${emote}). The game will end once ${kLimit} participants have been shot or ${iLimit} minutes pass`);
       }catch(e){
         console.error(e);
         return message.reply(`Usage: c!roulettedog #channelId <spawnchance> <interval> <emote> <participantLimit> <killLimit> <minimumParticipants> <inactiveLimit>`);
