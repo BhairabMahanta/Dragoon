@@ -20,8 +20,8 @@ const path = require('path');
 
       // Define a function to handle starting the roulette game or taking other actions
 async function startRouletteOrOtherAction(participants, daHta, sentMessage, users, client) {
-
-
+    pewChannel = client.channels.cache.get('1207557983903416340');
+console.log('pewChannel:', pewChannel);
     // Check if the participant limit or the inactive limit is reached
     console.log('startRouletteOrOtherAction')
     let winnerArray = [];
@@ -54,21 +54,16 @@ const uniqueFilename = `avatar_${uuidv4()}.webp`;
 
 // const cdnUrl = 'https://cdn.discordapp.com';
 console.log('test')
-const resizedImage = await sharp(imagePath)
+let resizedImage;
+try {
+resizedImage = await sharp(imagePath)
 .rotate(-2, { background: 'transparent' })
 .resize(117, 117, { fit: sharp.fit.inside }) // Resize proportionally
 .toBuffer();
-// setTimeout(() => {
-//     // Delete the existing avatar file when job is done
-//     fs.unlink(imagePath, (err) => {
-//         if (err) {
-//             console.error('Error deleting avatar file:', err);
-//         } else {
-//             console.log('Avatar file deleted successfully');
-//         }
-//     });
-// }, 1000); // Adjust the delay time (in milliseconds) as needed
-// Set the size and position of the circle
+} catch (error) {
+console.error('Error resizing image:', error);
+return sentMessage.channel.send({ content: 'Error resizing image' });
+}
 const circleSize = 100; // Adjust the size of the circle as needed
 const circleX = 995; // Adjust the X position of the circle
 const circleY = 180; // Adjust the Y position of the circle
@@ -98,24 +93,88 @@ const compositeImageBuffer = await sharp(background)
     .composite([{ input: circularImageBuffer, left: circleX, top: circleY }])
     .png()
     .toBuffer();
-
-
-    
         console.log('test')
-        attachment = new AttachmentBuilder(compositeImageBuffer, { name: 'profile-image.png'});
+
+        const text = winnerNameArray[0]
+        const textCanvas = Canvas.createCanvas(1440, 720); // Adjust dimensions as needed
+const textCtx = textCanvas.getContext('2d');
+
+// Set font properties
+textCtx.font = '24px Arial';
+textCtx.fillStyle = 'black';
+textCtx.textAlign = 'center';
+textCtx.textBaseline = 'middle';
+const textX = circleX+ 67
+const textY = circleY + 140
+
+// Rotate around the text position
+textCtx.translate(textX, textY); // Translate to the center of the text
+textCtx.rotate(-4 * Math.PI / 180);
+textCtx.translate(-textX, -textY); // Translate back to the original position
+
+
+// Draw the text on the text canvas
+textCtx.fillText(text, textX, textY);
+
+// Convert the text canvas to a buffer
+const textBuffer = textCanvas.toBuffer('image/png');
+
+        
+        const compositeImageBuffer2 = await sharp(compositeImageBuffer)
+        .composite([{ input: textBuffer, gravity: 'northeast' }]) // Adjust gravity as needed
+        .png()
+        .toBuffer();
+
+
+
+        attachment = new AttachmentBuilder(compositeImageBuffer2, { name: 'profile-image.png'});
         
         console.log('test')
 
 
         const embedd = new EmbedBuilder()
         .setTitle(`Doggo Roulette # ${daHta.monthly - 1}!`)
+        .setColor('#FFC700')
         .setImage('attachment://profile-image.png')
         .setDescription(`${winnerNameArray.join('\n')} ${daHta.emote}`);
        
-        
+        const embeddd = new EmbedBuilder()
+        .setTitle(`Doggo Roulette # ${daHta.monthly - 1}!`)
+        .setImage('attachment://profile-image.png')
+        .setDescription(`${winnerNameArray.join('\n')} ${daHta.emote}`);
+
+
         await sentMessage.edit({ embeds: [embedd], files: [attachment], components: [] });
+    await pewChannel.send({ content: `<@${winnerArray[0]}> has been shot by Amber`, files: [attachment] });
+   
+   
+   
+    let previousWinners = {};
+    try {
+        const data = efs.readFileSync('./commands/fun/previousWinners.json', 'utf8');
+        previousWinners = JSON.parse(data);
+    } catch (err) {
+        console.error('Error reading previous winners data:', err);
+    }
     
-  
+    // Check if winnerArray[0] is present in previous winners
+    const winnerId = winnerArray[0];
+    if (previousWinners.hasOwnProperty(winnerId)) {
+        // If present, increment the count
+        previousWinners[winnerId]++;
+    } else {
+        // If not present, add with an initial count of 1
+        previousWinners[winnerId] = 1;
+    }
+    
+    // Write the updated data back to JSON file
+    efs.writeFile('./commands/fun/previousWinners.json', JSON.stringify(previousWinners, null, 2), (err) => {
+        if (err) {
+            console.error('Error saving previous winners data:', err);
+        } else {
+            console.log('Previous winners data saved successfully.');
+        }
+    });
 }
 
 
@@ -164,11 +223,16 @@ async function fetchUserPfp(userId, client) {
         const user = await client.users.fetch(userId);
          const thing = user.displayAvatarURL({ format: 'png', dynamic: true });
         const response = await axios.get(thing, { responseType: 'arraybuffer' });
+        console.log('response:', response);
  
         return response.data; 
     } catch (error) {
+        const user = await client.users.fetch('1155961824894795827');
+         const thing = user.displayAvatarURL({ format: 'png', dynamic: true });
+        const response = await axios.get(thing, { responseType: 'arraybuffer' });
+        console.log('response:', response);
         console.error(error);
-        return null; // Return null if fetching fails
+        return response.data; // Return null if fetching fails
     }
 }
 

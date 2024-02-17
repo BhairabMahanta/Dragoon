@@ -6,6 +6,7 @@ class RouletteGame {
         this.settings = settings;
         this.client = client;
         this.participants = [];
+        this.participantsToSplice = [];
         this.users = [];
         this.startTime = null;
         this.sentMessage = null;
@@ -31,8 +32,20 @@ class RouletteGame {
         // Create the initial embed
         const embed = new EmbedBuilder()
             .setTitle(`Roulette Game # ${daHta.monthly}!`)
+            .setColor('#FFC700')
             .setDescription(`React with the button ${daHta.emote}`)
-            .addFields({ name: 'Participants', value: this.participants.length === 0 ? `None, aborting it if ${daHta.inactiveLimit / 60000} minutes cross without any participants!` : this.participants.join('\n'), inline: false })
+            .addFields({ 
+                name: 'Participants', 
+                value: this.participants.length === 0 ? 
+                  `None, aborting if ${
+                    daHta.inactiveLimit / 60000 < 1 ? 
+                    Math.floor((daHta.inactiveLimit /60000 )* 60) + ' seconds' : 
+                    Math.floor(daHta.inactiveLimit / 60000) + ' minutes'
+                  } without any participants!` : 
+                  this.participants.join('\n'), 
+                inline: false 
+              })
+              
             .addFields({ name: 'Participant Limit', value: `${this.participants.length}/${daHta.participantLimit}`, inline: false });
 
         // Create the action row with the button
@@ -58,24 +71,40 @@ class RouletteGame {
             try {
                 interaction.deferUpdate();
 
-                if (!this.participants.includes(interaction.user.id)) {
+                if (!this.participants.includes(interaction.user.id) &&!(this.participants.length >= this.daHta.participantLimit) ) {
+
+                console.log('participants:', this.participants.length)
+console.log('participantslimit:', this.daHta.participantLimit)
+const elapsedTime = Date.now() - this.startTime;
+console.log('Elapsed time:', elapsedTime);
+                  
+                    if (!(this.participants.length >= this.daHta.participantLimit)) {
+                        console.log('adding participant', interaction.user.id)
+                    
                     this.participants.push(interaction.user.id);
+                    this.participantsToSplice.push(interaction.user.id);
+                    console.log('participantspart2:', this.participants.length)
+                    console.log('participantLimitpart2:', this.daHta.participantLimit)
+                    console.log('participantsArray:', this.participants)
                     this.users.push(interaction.user.username);
 
                     embed.data.fields[0].value = this.users.join('\n');
-                    embed.data.fields[1].value = `${this.participants.length}/${daHta.participantLimit}`;
+                    embed.data.fields[1].value = `${this.participants.length}/${this.daHta.participantLimit}`;
 
                     await this.sentMessage.edit({ embeds: [embed], components: [row] });
+                    
+                    
+                        } else { 
+                            console.log('PARTICIPANT LIMIT EXCEEDED YOU CANT JOIN ', interaction.user.username)   
+                        }
+                    
                 } else {
-                    this.sentMessage.channel.send({ content: 'You have a deathwish trying to participate multiple times!?', ephemeral: true });
+                   // this.sentMessage.channel.send({ content: 'You can only join the roulette game once', ephemeral: true }); 
+                   console.log('PARTICIPANT LIMIT EXCEEDED YOU CANT JOIN ', interaction.user.username)   
+                  return console.log('fix this later')
                 }
-
-                const elapsedTime = Date.now() - this.startTime;
-                console.log('Elapsed time: before end', elapsedTime);
-console.log('participants', this.participants.length);
-console.log('daHta.participantLimit', daHta.participantLimit);
                 if (this.participants.length >= daHta.participantLimit ) {
-                    await startRouletteOrOtherAction(this.participants, this.daHta, this.sentMessage, this.users , this.client);
+                    await startRouletteOrOtherAction(this.participantsToSplice, this.daHta, this.sentMessage, this.users , this.client);
                     this.isDone = true;
                 }
             } catch (error) {
@@ -88,7 +117,13 @@ console.log('daHta.participantLimit', daHta.participantLimit);
             const elapsedTime = Date.now() - this.startTime;
             console.log('Elapsed time:', elapsedTime);
             if ((this.participants.length >= daHta.participantLimit && !this.isDone)|| ((elapsedTime >= daHta.inactiveLimit && this.participants.length >= daHta.minimumParticipants && !this.isDone))) {
-                await startRouletteOrOtherAction(this.participants, this.daHta, this.sentMessage, this.users , this.client);
+                await startRouletteOrOtherAction(this.participantsToSplice, this.daHta, this.sentMessage, this.users , this.client);
+            } else if (elapsedTime >= daHta.inactiveLimit && this.participants.length < daHta.minimumParticipants && !this.isDone) {
+                const embed = new EmbedBuilder()
+            .setTitle(`Roulette Game # ${daHta.monthly}!`)
+            .setColor('#FFC700')
+            .setDescription(`Ended due to inactivity.\n${daHta.emote} No one will be pardoned for this sin.`)
+            await this.sentMessage.edit({ embeds: [embed], components: [] });
             }
         });
     }
