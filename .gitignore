@@ -2,5 +2,13 @@ node_modules
 .env
 config.json
 roulette.json
+previousWinners.json
+rouletteClass.js
+talkdog.js
+roulettedog.js
+watching.js
+watchdog.js
+someFunctions.js
+
 crowdddd.png
 
