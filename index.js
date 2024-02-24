@@ -30,7 +30,7 @@ loadCommands(client);
 
 client.on('messageCreate', (message) => {
 	try {
-		if (message.content.startsWith('a!')) {
+		if (message.content.startsWith('c!')) {
 			const args = message.content.slice(2).trim().split(/ +/);
 			const commandName = args.shift().toLowerCase();
 			console.log(`Received command: ${commandName}`);
@@ -56,7 +56,6 @@ client.on('messageCreate', (message) => {
 });
 
 client.on('ready', () => {
-	console.log('client:', client.channels);
 	console.log(`${client.user.tag} is ready!🚀`);
 
 	client.user.setPresence({
