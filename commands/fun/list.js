@@ -33,8 +33,10 @@ module.exports = {
 			.setDescription('List of keywords and their responses:')
 			.setFields(
 				keywords.map((keywordObj) => {
+					const chanceee = keywordObj.chance ? keywordObj.chance : 100;
+					const keywordda = keywordObj.keyword.join(', ');
 					return {
-						name: `**${keywordObj.keyword}**`,
+						name: `**${keywordda} - ${chanceee}% chance**`,
 						value: `> ${keywordObj.response}`,
 						inline: false,
 					};

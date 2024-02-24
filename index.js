@@ -30,7 +30,7 @@ loadCommands(client);
 
 client.on('messageCreate', (message) => {
 	try {
-		if (message.content.startsWith('c!')) {
+		if (message.content.startsWith('a!')) {
 			const args = message.content.slice(2).trim().split(/ +/);
 			const commandName = args.shift().toLowerCase();
 			console.log(`Received command: ${commandName}`);
