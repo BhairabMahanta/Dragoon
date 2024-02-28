@@ -1,30 +1,32 @@
-const { EmbedBuilder, ActionRowBuilder, ButtonBuilder } = require('discord.js');
-
-const { WebhookClient, GatewayIntentBits } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
+const ownerIds = ['537619455409127442', '169160763091451904', '99828960719806464'];
+const { WebhookClient } = require('discord.js');
 
 module.exports = {
-	name: 'webook',
-	description: 'Displays a list of available commands and their descriptions.',
+	name: 'edit',
+	description: 'Edits the image of an embed in a message sent by a webhook.',
 	async execute(client, message, args) {
-		// Replace 'YOUR_WEBHOOK_URL' with your actual webhook URL crowd
-		const webhookURL =
-			'https://discord.com/api/webhooks/1200168986294366379/eYE1Ijkk1oQhvm1Br32pjFRYpLgIsNoMEjyL7XB4zt_MOGqRgEOiFJGJIIooKeIe3JfP';
+		if (!ownerIds.includes(message.author.id)) {
+			return message.reply('You do not have permission to use this command.');
+		}
+		if (args.length !== 3) {
+			return message.reply('Please provide the webhook URL, message ID, and image URL as arguments.');
+		}
+
+		const [webhookURL, messageID, imageURL] = args;
 
 		// Create a new WebhookClient
 		const webhook = new WebhookClient({ url: webhookURL });
+
 		try {
-			const newImageURL =
-				'https://cdn.discordapp.com/attachments/1162906838690431115/1200160506632224829/gaming_banner.png?ex=65c52b92&is=65b2b692&hm=11f2a63af007db5a3275f5a616a0e27ccc80bc69ec059b9f689c5ca04548cb8e&';
-			const originalMessage = await webhook.fetchMessage('1212115413287313498');
+			const originalMessage = await webhook.fetchMessage(messageID);
 			const existingEmbed = originalMessage.embeds[0];
 
 			// Create a new embed with the same properties as the existing one
 			const newEmbed = new EmbedBuilder(existingEmbed);
 
 			// Update only the image URL in the new embed
-			newEmbed.setImage(
-				'https://cdn.discordapp.com/attachments/1162906838690431115/1200160506632224829/gaming_banner.png?ex=65c52b92&is=65b2b692&hm=11f2a63af007db5a3275f5a616a0e27ccc80bc69ec059b9f689c5ca04548cb8e&',
-			);
+			newEmbed.setImage(imageURL);
 
 			// Edit the original message with the modified embed
 			await webhook.editMessage(originalMessage, {
@@ -33,8 +35,8 @@ module.exports = {
 
 			message.reply('Embed message edited successfully!');
 		} catch (error) {
-			console.error('Error sending/editing webhook embed message:', error);
-			message.reply('An error occurred while sending/editing the webhook embed message.');
+			console.error('Error editing webhook embed image:', error);
+			message.reply('An error occurred while editing the webhook embed image.');
 		} finally {
 			// Destroy the WebhookClient to avoid memory leaks
 			webhook.destroy();
