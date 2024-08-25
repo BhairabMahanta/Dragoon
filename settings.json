@@ -1,0 +1,15 @@
+{
+    "dbUrl": "mongodb+srv://bhairabm1908:MRQw0A6lOE5hrNYP@lmswtdl.yt83tf5.mongodb.net/",
+    "prefix": "n",
+    "developers": [
+        "537619455409127442"
+    ],
+    "features": [
+        "general",
+        "developer",
+        "dropAnalysis",
+        "config"
+    ],
+    "statusChannelId": "1155951981970591864",
+    "developerChannelId": "1139983793550282893"
+}
